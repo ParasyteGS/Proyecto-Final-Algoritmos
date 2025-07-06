@@ -20,11 +20,11 @@ El objetivo principal es organizar puntos en un plano 2D y generar su representa
 
 ## Visualización
 
-La siguiente imagen representa gráficamente el resultado del Quadtree luego de insertar varios puntos:
+La siguiente imagen representa gráficamente el resultado del Quadtree luego de insertar 7 puntos:
 
 ![Visualización del Quadtree](quadtree_proyect.png)
 
-La siguiente imagen representa gráficamente el resultado del Quadtree luego de eliminar un punto:
+La siguiente imagen representa gráficamente el resultado del Quadtree luego de eliminar el punto 5:
 
 ![Visualización del Quadtree 2](quadtree_proyect_2.png)
 
