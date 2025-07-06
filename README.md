@@ -24,4 +24,8 @@ La siguiente imagen representa gráficamente el resultado del Quadtree luego de 
 
 ![Visualización del Quadtree](quadtree_proyect.png)
 
+La siguiente imagen representa gráficamente el resultado del Quadtree luego de eliminar un punto:
+
+![Visualización del Quadtree 2](quadtree_proyect_2.png)
+
 ---
