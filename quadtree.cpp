@@ -27,6 +27,14 @@ struct Boundary
     }
 };
 
+bool intersects(const Boundary &a, const Boundary &b)
+{
+    return !(a.x - a.halfWidth > b.x + b.halfWidth ||
+             a.x + a.halfWidth < b.x - b.halfWidth ||
+             a.y - a.halfHeight > b.y + b.halfHeight ||
+             a.y + a.halfHeight < b.y - b.halfHeight);
+}
+
 class QuadTree
 {
 public:
@@ -79,6 +87,64 @@ public:
         }
         points.clear();
         divided = true;
+    }
+
+    bool search(int x, int y) const
+    {
+        if (!boundary.contains(Point(0, x, y)))
+            return false;
+
+        for (const auto &p : points)
+            if (p.x == x && p.y == y)
+                return true;
+
+        if (divided)
+            return (NE->search(x, y) || NW->search(x, y) || SE->search(x, y) || SW->search(x, y));
+
+        return false;
+    }
+
+    void rangeQuery(const Boundary &area, std::vector<Point> &found) const
+    {
+        if (!intersects(area, boundary))
+            return;
+
+        for (const auto &p : points)
+            if (area.contains(p))
+                found.push_back(p);
+
+        if (divided)
+        {
+            NE->rangeQuery(area, found);
+            NW->rangeQuery(area, found);
+            SE->rangeQuery(area, found);
+            SW->rangeQuery(area, found);
+        }
+    }
+
+    bool remove(int id, int x, int y)
+    {
+        if (!boundary.contains(Point(id, x, y)))
+            return false;
+
+        for (auto it = points.begin(); it != points.end(); ++it)
+        {
+            if (it->id == id && it->x == x && it->y == y)
+            {
+                points.erase(it);
+                return true;
+            }
+        }
+
+        if (divided)
+        {
+            return (NE->remove(id, x, y) ||
+                    NW->remove(id, x, y) ||
+                    SE->remove(id, x, y) ||
+                    SW->remove(id, x, y));
+        }
+
+        return false;
     }
 
     void toDot(ofstream &out)
@@ -138,6 +204,21 @@ int main()
     qt.toDot(file);
     file << "}\n";
     file.close();
+
+    cout << (qt.search(45, 25) ? "Existe" : "No existe") << "\n";
+
+    Boundary region(50, 50, 30, 30);
+    vector<Point> found;
+    qt.rangeQuery(region, found);
+
+    cout << "Puntos en la region (50,50) +/- 30:\n";
+    for (const auto &p : found)
+        cout << " - P" << p.id << " (" << p.x << "," << p.y << ")\n";
+
+    if (qt.remove(5, 45, 25))
+        cout << "Punto P5 eliminado\n";
+    else
+        cout << "Punto P5 no encontrado\n";
 
     return 0;
 }
