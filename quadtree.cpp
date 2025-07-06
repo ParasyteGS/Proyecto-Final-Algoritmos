@@ -220,5 +220,11 @@ int main()
     else
         cout << "Punto P5 no encontrado\n";
 
+    ofstream file2("quadtree_proyect_2.dot");
+    file2 << "digraph QuadTree {\n";
+    qt.toDot(file2);
+    file2 << "}\n";
+    file2.close();
+
     return 0;
 }
