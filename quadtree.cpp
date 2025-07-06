@@ -83,14 +83,15 @@ public:
 
     void toDot(ofstream &out)
     {
-        out << "node" << id << " [label=\"(" << boundary.x << "," << boundary.y << ")\"];\n";
+        // Nodo del QuadTree (región)
+        out << "node" << id << " [label=\"Area (" << boundary.x << "," << boundary.y << ")\", shape=circle, style=filled, fillcolor=lightblue];\n";
 
         if (!divided)
         {
             for (const auto &p : points)
             {
                 int pid = counter++;
-                out << "node" << pid << " [label=\"P(" << p.x << "," << p.y << ")\",shape=box];\n";
+                out << "node" << pid << " [label=\"P" << p.id << " (" << p.x << "," << p.y << ")\", shape=box, style=filled, fillcolor=lightgreen];\n";
                 out << "node" << id << " -> node" << pid << ";\n";
             }
         }
@@ -100,10 +101,12 @@ public:
             NW->toDot(out);
             SE->toDot(out);
             SW->toDot(out);
-            out << "node" << id << " -> node" << NE->id << ";\n";
-            out << "node" << id << " -> node" << NW->id << ";\n";
-            out << "node" << id << " -> node" << SE->id << ";\n";
-            out << "node" << id << " -> node" << SW->id << ";\n";
+
+            // Relación visual entre nodo padre e hijos
+            out << "node" << id << " -> node" << NE->id << " [label=\"NE\"];\n";
+            out << "node" << id << " -> node" << NW->id << " [label=\"NW\"];\n";
+            out << "node" << id << " -> node" << SE->id << " [label=\"SE\"];\n";
+            out << "node" << id << " -> node" << SW->id << " [label=\"SW\"];\n";
         }
     }
 
