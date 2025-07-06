@@ -5,7 +5,7 @@
 
 using namespace std;
 
-const int MAX_POINTS = 2;
+const int MAX_POINTS = 4;
 
 struct Point
 {
@@ -80,11 +80,18 @@ public:
 
         for (Point &p : points)
         {
-            NE->insert(p);
-            NW->insert(p);
-            SE->insert(p);
-            SW->insert(p);
+            if (NE->insert(p))
+                continue;
+            if (NW->insert(p))
+                continue;
+            if (SE->insert(p))
+                continue;
+            if (SW->insert(p))
+                continue;
+
+            cerr << "No se pudo insertar el punto P" << p.id << " (" << p.x << "," << p.y << ") tras subdivisión.\n";
         }
+
         points.clear();
         divided = true;
     }
@@ -149,7 +156,6 @@ public:
 
     void toDot(ofstream &out)
     {
-        // Nodo del QuadTree (región)
         out << "node" << id << " [label=\"Area (" << boundary.x << "," << boundary.y << ")\", shape=circle, style=filled, fillcolor=lightblue];\n";
 
         if (!divided)
@@ -168,7 +174,6 @@ public:
             SE->toDot(out);
             SW->toDot(out);
 
-            // Relación visual entre nodo padre e hijos
             out << "node" << id << " -> node" << NE->id << " [label=\"NE\"];\n";
             out << "node" << id << " -> node" << NW->id << " [label=\"NW\"];\n";
             out << "node" << id << " -> node" << SE->id << " [label=\"SE\"];\n";
