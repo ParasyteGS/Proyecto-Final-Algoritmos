@@ -5,12 +5,12 @@
 
 using namespace std;
 
-const int MAX_POINTS = 1;
+const int MAX_POINTS = 2;
 
 struct Point
 {
-    int x, y;
-    Point(int _x, int _y) : x(_x), y(_y) {}
+    int id, x, y;
+    Point(int _id, int _x, int _y) : id(_id), x(_x), y(_y) {}
 };
 
 struct Boundary
@@ -116,8 +116,25 @@ public:
     }
 };
 
+int QuadTree::counter = 0;
+
 int main()
 {
+
+    Boundary world(50, 50, 50, 50);
+    QuadTree qt(world);
+
+    vector<Point> puntos = {
+        {1, 12, 2}, {2, 70, 20}, {3, 25, 50}, {4, 10, 80}, {5, 45, 25}, {6, 67, 98}, {7, 10, 11}};
+
+    for (const auto &p : puntos)
+        qt.insert(p);
+
+    ofstream file("quadtree_proyect.dot");
+    file << "digraph QuadTree {\n";
+    qt.toDot(file);
+    file << "}\n";
+    file.close();
 
     return 0;
 }
