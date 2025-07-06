@@ -17,3 +17,11 @@ Este proyecto implementa una estructura de datos **Quadtree** utilizando el leng
 El objetivo principal es organizar puntos en un plano 2D y generar su representación gráfica mediante un archivo `.dot`, el cual puede visualizarse con la herramienta Graphviz.
 
 ---
+
+## Visualización
+
+La siguiente imagen representa gráficamente el resultado del Quadtree luego de insertar varios puntos:
+
+![Visualización del Quadtree](quadtree_proyect.png)
+
+---
