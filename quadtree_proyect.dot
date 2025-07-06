@@ -1,0 +1,31 @@
+digraph QuadTree {
+node0 [label="(50,50)"];
+node1 [label="(75,25)"];
+node9 [label="P(70,20)",shape=box];
+node1 -> node9;
+node2 [label="(25,25)"];
+node5 [label="(37,13)"];
+node10 [label="P(45,25)",shape=box];
+node5 -> node10;
+node6 [label="(13,13)"];
+node11 [label="P(12,2)",shape=box];
+node6 -> node11;
+node12 [label="P(10,11)",shape=box];
+node6 -> node12;
+node7 [label="(37,37)"];
+node8 [label="(13,37)"];
+node2 -> node5;
+node2 -> node6;
+node2 -> node7;
+node2 -> node8;
+node3 [label="(75,75)"];
+node13 [label="P(67,98)",shape=box];
+node3 -> node13;
+node4 [label="(25,75)"];
+node14 [label="P(10,80)",shape=box];
+node4 -> node14;
+node0 -> node1;
+node0 -> node2;
+node0 -> node3;
+node0 -> node4;
+}
