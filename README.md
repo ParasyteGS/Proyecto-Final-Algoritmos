@@ -29,3 +29,9 @@ La siguiente imagen representa gráficamente el resultado del Quadtree luego de 
 ![Visualización del Quadtree 2](quadtree_proyect_2.png)
 
 ---
+
+## Benchmark
+
+![Benchmark del Quadtree](benchmark_quadtree_insert_range.png)
+
+---
