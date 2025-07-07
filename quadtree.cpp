@@ -2,6 +2,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <chrono>
+#include <random>
 
 using namespace std;
 
@@ -190,6 +192,50 @@ public:
     }
 };
 
+void benchmark(int max_points)
+{
+    default_random_engine rng(42);
+    uniform_int_distribution<int> dist(0, 100);
+
+    ofstream out("benchmark_results.csv");
+    out << "n,time_insert,time_range\n";
+
+    for (int n = 100; n <= max_points; n += 100)
+    {
+        QuadTree::counter = 0;
+        Boundary world(50, 50, 50, 50);
+        QuadTree qt(world);
+        vector<Point> pts;
+
+        for (int i = 0; i < n; ++i)
+            pts.emplace_back(i, dist(rng), dist(rng));
+
+        // Medir inserción
+        auto t1 = chrono::high_resolution_clock::now();
+        for (const auto &p : pts)
+            qt.insert(p);
+        auto t2 = chrono::high_resolution_clock::now();
+
+        // Medir búsqueda por rango
+        Boundary region(50, 50, 25, 25);
+        vector<Point> found;
+        auto t3 = chrono::high_resolution_clock::now();
+        qt.rangeQuery(region, found);
+        auto t4 = chrono::high_resolution_clock::now();
+
+        // Calcular tiempos
+        auto insert_time =
+            chrono::duration_cast<chrono::microseconds>(t2 - t1).count();
+        auto range_time =
+            chrono::duration_cast<chrono::microseconds>(t4 - t3).count();
+
+        // Guardar resultados
+        out << n << "," << insert_time << "," << range_time << "\n";
+    }
+
+    out.close();
+}
+
 int QuadTree::counter = 0;
 
 int main()
@@ -230,6 +276,8 @@ int main()
     qt.toDot(file2);
     file2 << "}\n";
     file2.close();
+
+    benchmark(5000);
 
     return 0;
 }
