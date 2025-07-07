@@ -1,9 +1,10 @@
+#include <chrono>
+#include <random>
+
 #include <iostream>
 #include <vector>
 #include <fstream>
 #include <string>
-#include <chrono>
-#include <random>
 
 using namespace std;
 
@@ -90,8 +91,6 @@ public:
                 continue;
             if (SW->insert(p))
                 continue;
-
-            cerr << "No se pudo insertar el punto P" << p.id << " (" << p.x << "," << p.y << ") tras subdivisión.\n";
         }
 
         points.clear();
@@ -192,6 +191,8 @@ public:
     }
 };
 
+int QuadTree::counter = 0;
+
 void benchmark(int max_points)
 {
     default_random_engine rng(42);
@@ -210,33 +211,27 @@ void benchmark(int max_points)
         for (int i = 0; i < n; ++i)
             pts.emplace_back(i, dist(rng), dist(rng));
 
-        // Medir inserción
         auto t1 = chrono::high_resolution_clock::now();
         for (const auto &p : pts)
             qt.insert(p);
         auto t2 = chrono::high_resolution_clock::now();
 
-        // Medir búsqueda por rango
         Boundary region(50, 50, 25, 25);
         vector<Point> found;
         auto t3 = chrono::high_resolution_clock::now();
         qt.rangeQuery(region, found);
         auto t4 = chrono::high_resolution_clock::now();
 
-        // Calcular tiempos
         auto insert_time =
             chrono::duration_cast<chrono::microseconds>(t2 - t1).count();
         auto range_time =
             chrono::duration_cast<chrono::microseconds>(t4 - t3).count();
 
-        // Guardar resultados
         out << n << "," << insert_time << "," << range_time << "\n";
     }
 
     out.close();
 }
-
-int QuadTree::counter = 0;
 
 int main()
 {
