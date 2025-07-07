@@ -182,6 +182,26 @@ public:
         }
     }
 
+    void preOrderTraversal() const
+    {
+        // Mostrar información del nodo actual
+        cout << "Nodo ID " << id << " Centro: (" << boundary.x << "," << boundary.y
+             << "), ";
+        cout << "Puntos: ";
+        for (const auto &p : points)
+            cout << "P" << p.id << "(" << p.x << "," << p.y << ") ";
+        cout << "\n";
+
+        // Recorrer hijos si está subdividido
+        if (divided)
+        {
+            NE->preOrderTraversal();
+            NW->preOrderTraversal();
+            SE->preOrderTraversal();
+            SW->preOrderTraversal();
+        }
+    }
+
     ~QuadTree()
     {
         delete NE;
@@ -272,7 +292,10 @@ int main()
     file2 << "}\n";
     file2.close();
 
-    benchmark(5000);
+    // benchmark(5000);
+
+    cout << "Recorrido en preorden:\n";
+    qt.preOrderTraversal();
 
     return 0;
 }
